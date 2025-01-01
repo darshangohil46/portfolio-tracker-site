@@ -13,7 +13,6 @@ const Home = () => {
                 'http://localhost:8000/api/get-data/',
                 { withCredentials: true }
             );
-            console.log("User Data:", response.data);
             setData(response.data);
         } catch (error) {
             console.error("Error Fetching User Data:", error);

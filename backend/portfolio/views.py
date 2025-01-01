@@ -95,18 +95,20 @@ def logout_user(request):
     return response
 
 
-@api_view(["GET"])
+@csrf_exempt
 def stock_list_view(request):
     print(request.user, request.user.is_authenticated)
     if request.method == "GET":
         stocks = Stock.objects.filter(user=request.user)
         serializer = StockSerializer(stocks, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
     else:
-        return Response({"error": "Invalid method"}, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(
+            {"error": "Invalid method"}, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
+# call when submit stock data
 @csrf_exempt
 def manage_stock(request):
     if request.method == "POST":
@@ -174,9 +176,9 @@ class PortfolioMetricsView(APIView):
 
 @csrf_exempt
 def stock_detail(request, pk):
-    print(json.loads(request.body))
     try:
         stock = Stock.objects.get(pk=pk)
+        print(stock)
     except Stock.DoesNotExist:
         return JsonResponse(
             {"detail": "Stock not found"}, status=status.HTTP_404_NOT_FOUND
@@ -198,3 +200,53 @@ def stock_detail(request, pk):
     return JsonResponse(
         {"message": "Invalid method"}, status=status.HTTP_405_METHOD_NOT_ALLOWED
     )
+
+
+@csrf_exempt
+def update_user_profile(request):
+    if request.user.is_authenticated and request.method == "POST":
+        data = json.loads(request.body)
+        print(data)
+        user_id = request.user.id
+        user = User.objects.get(id=user_id)
+
+        # Get the data from the request
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+        email = data.get("email")
+        username = data.get("username")
+        password = data.get("password")
+
+        if User.objects.get(username=username) and request.user == username:
+            return JsonResponse(
+                {"error": "username already exists"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        # Update the user's fields
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.username = username
+
+        # If password is provided, update it
+        if password:
+            user.set_password(password)  # Hash the new password
+
+        # Save the updated user object
+        user.save()
+
+        # Return the updated user profile
+        return JsonResponse(
+            {
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
+                "username": user.username,
+            },
+            status=status.HTTP_200_OK,
+        )
+    else:
+        return JsonResponse(
+            {"error": "Authentication required."}, status=status.HTTP_401_UNAUTHORIZED
+        )

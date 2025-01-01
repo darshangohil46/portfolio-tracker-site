@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound';
 import Login from "./pages/Login";
 import Signup from './pages/Signup';
 import axios from 'axios';
+import EditProfile from './pages/EditProfile';
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -52,6 +53,17 @@ const App = () => {
             </>
           } />
         </>
+
+        <Route path="/edit-profile" element={
+          <>
+            <Navbar />
+            {data &&
+              <EditProfile />
+            }
+            {!data &&
+              <Login />}
+          </>
+        } />
 
         <Route path="/login" element={
           <>

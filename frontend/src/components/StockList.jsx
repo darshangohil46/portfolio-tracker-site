@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 
-
 const StockList = () => {
     const [stocks, setStocks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -97,8 +96,8 @@ const StockList = () => {
         <div className="container my-4">
             <h2 className="text-center mb-4">Stock Holdings</h2>
             <div className="table-responsive">
-                <table className="table table-striped table-bordered">
-                    <thead className="thead-dark">
+                <table className="table table-hover table-striped border shadow rounded">
+                    <thead className="bg-dark text-white">
                         <tr>
                             <th>Name</th>
                             <th>Ticker</th>
@@ -110,27 +109,36 @@ const StockList = () => {
                     <tbody>
                         {stocks.length > 0 ? (
                             stocks.map((stock) => (
-                                <tr key={stock.id}>
+                                <tr key={stock.id} className="align-middle">
                                     <td>{stock.name}</td>
                                     <td>{stock.ticker}</td>
                                     <td>{stock.quantity}</td>
-                                    <td>$ {stock.buy_price}</td>
+                                    <td>
+                                        <span className="badge bg-success fs-6">
+                                            $ {stock.buy_price}
+                                        </span>
+                                    </td>
                                     <td>
                                         <button
-                                            className="btn btn-sm btn-warning me-2"
+                                            className="btn btn-sm btn-outline-primary m-1"
                                             onClick={() => handleEdit(stock)}
                                         >
-                                            Edit
+                                            <i className="bi bi-pencil-square"></i> Edit
                                         </button>
-                                        <button className="btn btn-sm btn-danger"
-                                            onClick={() => handleDeleteClick(stock.id)}>Delete</button>
+                                        <button
+                                            className="btn btn-sm btn-outline-danger m-1"
+                                            onClick={() => handleDeleteClick(stock.id)}
+                                        >
+                                            <i className="bi bi-trash"></i> Delete
+                                        </button>
                                     </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5" className="text-center text-muted">
-                                    No stocks available. Add some to start tracking!
+                                <td colSpan="5" className="text-center text-muted py-4">
+                                    <h5>No stocks available</h5>
+                                    <p>Add some to start tracking your portfolio!</p>
                                 </td>
                             </tr>
                         )}
@@ -138,9 +146,8 @@ const StockList = () => {
                 </table>
             </div>
 
-            {/* Modal */}
             {isModalOpen && (
-                <div className="modal show d-block" tabIndex="-1">
+                <div class="modal show d-block" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -180,6 +187,7 @@ const StockList = () => {
                                         name="quantity"
                                         value={editedStock.quantity}
                                         onChange={handleInputChange}
+                                        min={0}
                                     />
                                 </div>
                                 <div className="mb-3">
@@ -190,6 +198,7 @@ const StockList = () => {
                                         name="buy_price"
                                         value={editedStock.buy_price}
                                         onChange={handleInputChange}
+                                        min={0}
                                     />
                                 </div>
                             </div>
@@ -213,6 +222,7 @@ const StockList = () => {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };

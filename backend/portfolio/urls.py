@@ -10,4 +10,5 @@ urlpatterns = [
     path("logout/", logout_user, name="portfolio-metrics"),
     path("get-data/", get_user_data, name="portfolio-metrics"),
     path("stocks/<int:pk>/", stock_detail, name="stock-detail"),
+    path("update-profile/", update_user_profile, name="update-profile"),
 ]

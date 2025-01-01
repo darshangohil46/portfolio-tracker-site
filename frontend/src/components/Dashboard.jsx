@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState({});
 
     const [metrics, setMetrics] = useState({
@@ -42,16 +44,33 @@ const Dashboard = () => {
         fetchMetrics();
     }, []);
 
+
+    const handleEditProfile = () => {
+        navigate('/edit-profile'); // Replace with your route for editing profile
+    };
+
+
     return (
         <div className="container my-4">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="display-4">Portfolio</div>
-                <div>
-                    <span class="h5 text-info me-3">Welcome,</span>
-                    <span class="h5 text-info me-3">{data.first_name}</span>
-                    <span class="h5 text-info">{data.last_name}</span>
+            <div className="row align-items-start">
+                <div className="col-12 m-2">
+                    <div className="display-4">Portfolio</div>
+                </div>
+                <div className="col-12 m-2">
+                    <div className="text-info">
+                        <span className="h5">Welcome, </span>
+                        <span className="h5 me-2">{data.first_name}</span>
+                        <span className="h5 me-2">{data.last_name}</span>
+                        <button
+                            className="btn btn-sm btn-outline-primary"
+                            onClick={() => handleEditProfile()}
+                        >
+                            <i className="bi bi-pencil-square"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
+
             <h2 className="text-center mb-4">Portfolio Metrics</h2>
             <div className="row">
                 {/* Total Value */}
