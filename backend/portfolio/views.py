@@ -7,13 +7,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Stock
 from .serializers import *
-from rest_framework.decorators import api_view
 from django.contrib.auth import logout, login, authenticate
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
 
 
 @csrf_exempt
@@ -66,25 +62,25 @@ def get_user_data(request):
 
 
 @csrf_exempt
-@api_view(["POST"])
 def signup(request):
     if request.method == "POST":
-        serializer = UserSerializer(data=request.data)
+        data = json.loads(request.body)
+        serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             user = authenticate(
                 request,
-                username=request.data.get("username"),
-                password=request.data.get("password"),
+                username=data.get("username"),
+                password=data.get("password"),
             )
             print(user)
             if user is not None:
                 login(request, user)
-                return Response(
+                return JsonResponse(
                     {"message": "Login successful"}, status=status.HTTP_200_OK
                 )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @csrf_exempt
@@ -207,29 +203,31 @@ def update_user_profile(request):
     if request.user.is_authenticated and request.method == "POST":
         data = json.loads(request.body)
         print(data)
-        user_id = request.user.id
-        user = User.objects.get(id=user_id)
+        user = request.user  # Using request.user directly since we already have the authenticated user
 
-        # Get the data from the request
+        # Get the data from the request (this is optional as we only need data for changes)
         first_name = data.get("first_name")
         last_name = data.get("last_name")
         email = data.get("email")
-        username = data.get("username")
+        new_username = data.get("username")
         password = data.get("password")
 
-        if User.objects.get(username=username) and request.user == username:
-            return JsonResponse(
-                {"error": "username already exists"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-        # Update the user's fields
-        user.first_name = first_name
-        user.last_name = last_name
-        user.email = email
-        user.username = username
-
-        # If password is provided, update it
+        # Update only the changed fields
+        if first_name:
+            user.first_name = first_name
+        if last_name:
+            user.last_name = last_name
+        if email:
+            user.email = email
+        if new_username and user.username != new_username:
+            try:
+                User.objects.get(username=new_username)
+                return JsonResponse(
+                    {"error": "Username already exists."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            except User.DoesNotExist:
+                user.username = new_username
         if password:
             user.set_password(password)  # Hash the new password
 

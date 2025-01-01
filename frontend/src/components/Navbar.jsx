@@ -2,7 +2,9 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import API_BASE_URL from '../Config';
 axios.defaults.withCredentials = true;
+
 
 const Navbar = () => {
     const [data, setData] = useState(null);
@@ -10,7 +12,7 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post('http://localhost:8000/api/logout/', {}, { withCredentials: true });
+            await axios.post(`${API_BASE_URL}/logout/`, {}, { withCredentials: true });
             navigate("/");
             window.location.reload();
         } catch (err) {
@@ -21,7 +23,7 @@ const Navbar = () => {
     const getLoggedInUser = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8000/api/get-data/',
+                `${API_BASE_URL}/get-data/`,
                 { withCredentials: true }
             );
             setData(response.data);
@@ -36,61 +38,51 @@ const Navbar = () => {
     }, []);
 
     return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
-            <div className="container-fluid">
-                <a className="navbar-brand" href="#">Portfolio Tracker</a>
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/">
-                                Home
-                            </Link>
-                        </li>
-                        {data && (
+        <>
+            <nav className="navbar navbar-expand-lg bg-body-tertiary">
+                <div className="container"> {/* Use a regular container for better responsiveness */}
+                    <Link className="navbar-brand" to="/">Portfolio Tracker</Link>
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" // Make sure this ID matches the div below
+                        aria-controls="navbarNav"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarNav"> {/* Consistent ID */}
+                        <ul className="navbar-nav ms-auto"> {/* Use ms-auto to push items to the right */}
                             <li className="nav-item">
-                                <Link className="nav-link" to="/portfolio">
-                                    Portfolio
-                                </Link>
+                                <Link className="nav-link" to="/">Home</Link>
                             </li>
-                        )}
-                    </ul>
-
-                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                        {data ? (
-                            <li className="nav-item">
-                                <Link onClick={handleLogout} className="nav-link">
-                                    Logout
-                                </Link>
-                            </li>
-                        ) : (
-                            <>
+                            {data && (
                                 <li className="nav-item">
-                                    <Link to="/login" className="nav-link">
-                                        Login
-                                    </Link>
+                                    <Link className="nav-link" to="/portfolio">Portfolio</Link>
                                 </li>
+                            )}
+                            {data ? (
                                 <li className="nav-item">
-                                    <Link to="/signup" className="nav-link">
-                                        Sign Up
-                                    </Link>
+                                    <Link className="nav-link" onClick={handleLogout} to="/">Logout</Link>
                                 </li>
-                            </>
-                        )}
-                    </ul>
+                            ) : (
+                                <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/login">Login</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/signup">Sign Up</Link>
+                                    </li>
+                                </>
+                            )}
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+            <div className="bg-primary p-1"></div>
+        </>
     );
 };
 

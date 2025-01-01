@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Signup from './pages/Signup';
 import axios from 'axios';
 import EditProfile from './pages/EditProfile';
+import API_BASE_URL from './Config';
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -16,7 +17,7 @@ const App = () => {
   const getLoggedInUser = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:8000/api/get-data/',
+        `${API_BASE_URL}/get-data/`,
         { withCredentials: true }
       );
       console.log("User Data:", response.data);

@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../Config';
 axios.defaults.withCredentials = true;
 
 const StockForm = () => {
     const [error, setError] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
     const [data, setData] = useState({})
     const [id, setId] = useState(null)
 
     const getLoggedInUser = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8000/api/get-data/',
+                `${API_BASE_URL}/get-data/`,
                 { withCredentials: true }
             );
             console.log("User Data:", response.data);
             setId(response.data.id)
             setData(response.data);
-            // Handle the fetched user data (e.g., display it in the UI)
         } catch (error) {
             console.error("Error Fetching User Data:", error);
         }
@@ -51,13 +50,13 @@ const StockForm = () => {
         console.log(formData);
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/manage-stock/",
+                `${API_BASE_URL}/manage-stock/`,
                 formData,
                 { withCredentials: true }
             );
             console.log("Response Data:", response.data);
             setData(response.data);
-            setSuccessMessage("Stock Added Successfully...")
+            window.location.reload()
         } catch (error) {
             setError("Error Submitting Stock Data...")
             console.error("Error Submitting Stock Data:", error.response?.data || error);
@@ -145,17 +144,7 @@ const StockForm = () => {
                     ></button>
                 </div>
             )}
-            {successMessage && (
-                <div className="alert alert-success alert-dismissible fade show mt-4" role="alert">
-                    {successMessage}
-                    <button
-                        type="button"
-                        className="btn-close"
-                        aria-label="Close"
-                        onClick={() => setSuccessMessage('')}
-                    ></button>
-                </div>
-            )}
+
         </>
     );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import API_BASE_URL from '../Config';
 axios.defaults.withCredentials = true;
 
 const Home = () => {
@@ -10,7 +11,7 @@ const Home = () => {
     const getLoggedInUser = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8000/api/get-data/',
+                `${API_BASE_URL}/get-data/`,
                 { withCredentials: true }
             );
             setData(response.data);

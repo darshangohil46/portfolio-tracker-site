@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from "../Config";
+axios.defaults.withCredentials = true;
 
 const Signup = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
+        first_name: "",
+        last_name: "",
         username: "",
         email: "",
         password: "",
@@ -13,20 +20,72 @@ const Signup = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();  // Prevent the default form submission behavior at the very beginning
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,12}$/;
+
         if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match!");
             return;
         }
-        console.log("Signup Data:", formData);
-        // Add API call for signup
+
+        if (passwordRegex.test(formData.password)) {
+            console.log("Password is valid.");
+            e.preventDefault();
+
+            console.log("Signup Data:", formData);
+            try {
+                const response = await axios.post(
+                    `${API_BASE_URL}/signup/`,  // Replace with your actual API endpoint
+                    formData,
+                    { withCredentials: true }
+                );
+                console.log("Signup Response:", response.data);
+                alert("Signup successful!");
+                window.location.reload()
+            } catch (error) {
+                console.error("Signup Error:", error.response);
+                alert("Username already exists.");
+            }
+        } else {
+            alert("Password must contain at least 1 uppercase letter,\n1 lowercase letter,\n1 special character,\nLength be between 8 and 12 characters long.");
+        }
     };
 
     return (
         <div className="container mt-5">
             <h2 className="text-center">Sign Up</h2>
             <form onSubmit={handleSubmit} className="w-50 mx-auto mt-3">
+                <div className="mb-3">
+                    <label htmlFor="first_name" className="form-label">
+                        First Name
+                    </label>
+                    <input
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        className="form-control"
+                        value={formData.first_name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="last_name" className="form-label">
+                        Last Name
+                    </label>
+                    <input
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        className="form-control"
+                        value={formData.last_name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">
                         Username
@@ -41,6 +100,7 @@ const Signup = () => {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">
                         Email
@@ -55,6 +115,7 @@ const Signup = () => {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="password" className="form-label">
                         Password
@@ -69,6 +130,7 @@ const Signup = () => {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="confirmPassword" className="form-label">
                         Confirm Password
@@ -83,6 +145,7 @@ const Signup = () => {
                         required
                     />
                 </div>
+
                 <button type="submit" className="btn btn-primary w-100">
                     Sign Up
                 </button>

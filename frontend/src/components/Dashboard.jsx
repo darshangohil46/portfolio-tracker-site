@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../Config';
 axios.defaults.withCredentials = true;
 
 const Dashboard = () => {
@@ -16,7 +17,7 @@ const Dashboard = () => {
     const getLoggedInUser = async () => {
         try {
             const response = await axios.get(
-                'http://localhost:8000/api/get-data/',
+                `${API_BASE_URL}/get-data/`,
                 { withCredentials: true }
             );
             console.log("User Data:", response.data);
@@ -34,7 +35,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchMetrics = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/metrics/');
+                const response = await axios.get(`${API_BASE_URL}/metrics/`);
                 setMetrics(response.data); // Update state with the fetched data
             } catch (error) {
                 console.error('Error fetching metrics:', error);

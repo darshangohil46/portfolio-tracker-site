@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_BASE_URL from "../Config";
 axios.defaults.withCredentials = true;
 
 const StockList = () => {
@@ -14,7 +15,7 @@ const StockList = () => {
     useEffect(() => {
         const fetchStocks = async () => {
             try {
-                const response = await axios.get("http://localhost:8000/api/stocks/", {
+                const response = await axios.get(`${API_BASE_URL}/stocks/`, {
                     withCredentials: true,
                 });
                 console.log(response.data);
@@ -42,7 +43,7 @@ const StockList = () => {
     const handleSave = async () => {
         try {
             const response = await axios.put(
-                `http://localhost:8000/api/stocks/${selectedStock.id}/`,
+                `${API_BASE_URL}/stocks/${selectedStock.id}/`,
                 editedStock,
                 { withCredentials: true }
             );
@@ -62,7 +63,7 @@ const StockList = () => {
         const reply = window.confirm("Are you sure to delete Stock?")
         if (reply) {
             try {
-                await axios.delete(`http://localhost:8000/api/stocks/${stockId}/`, {
+                await axios.delete(`${API_BASE_URL}/stocks/${stockId}/`, {
                     withCredentials: true,
                 });
                 setStocks(stocks.filter((stock) => stock.id !== stockId));

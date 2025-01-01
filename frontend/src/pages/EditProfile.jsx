@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./../App.css";
+import API_BASE_URL from '../Config';
 
 const EditProfile = () => {
     const [data, setData] = useState({});
@@ -15,7 +16,7 @@ const EditProfile = () => {
     // Fetch user data
     const getLoggedInUser = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/get-data/', {
+            const response = await axios.get(`${API_BASE_URL}/get-data/`, {
                 withCredentials: true,
             });
             console.log("User Data:", response.data);
@@ -44,18 +45,42 @@ const EditProfile = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await axios.post(
-                'http://localhost:8000/api/update-profile/',
-                formData,
-                { withCredentials: true }
-            );
-            console.log('Profile Updated:', response.data);
-            alert("Password Change Sucessfully. Now, Login with new Password.")
-            window.location.reload()
-        } catch (error) {
-            alert("This Username already Exists. Please! select another username")
-            console.error('Error Updating Profile:', error);
+        const updatedData = {};
+
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,12}$/;
+
+        if ((passwordRegex.test(formData.password)) || (formData.first_name) || (formData.last_name) || (formData.email) || (formData.username)) {
+            if (formData.first_name !== data.first_name) updatedData.first_name = formData.first_name;
+            if (formData.last_name !== data.last_name) updatedData.last_name = formData.last_name;
+            if (formData.email !== data.email) updatedData.email = formData.email;
+            if (formData.username !== data.username) updatedData.username = formData.username;
+            if (formData.password && (passwordRegex.test(formData.password))) {
+                updatedData.password = formData.password;
+            } else {
+                alert("Password must contain at least 1 uppercase letter,\n1 lowercase letter,\n1 special character,\nLength be between 8 and 12 characters long.");
+                return;
+            }
+
+            try {
+                const response = await axios.post(
+                    `${API_BASE_URL}/update-profile/`,
+                    updatedData,
+                    { withCredentials: true }
+                );
+                console.log('Profile Updated:', response.data);
+                if (formData.password) {
+                    alert("Password change successfully. Please! Login Again...")
+                }
+                else {
+                    alert("Change Successfully.");
+                }
+                window.location.reload();
+            } catch (error) {
+                alert("This Username already Exists. Please select another username");
+                console.error('Error Updating Profile:', error);
+            }
+        } else {
+            alert("Password must contain at least 1 uppercase letter,\n1 lowercase letter,\n1 special character,\nLength be between 8 and 12 characters long.");
         }
     };
 
@@ -72,7 +97,6 @@ const EditProfile = () => {
                     name="first_name"
                     value={formData.first_name}
                     onChange={handleInputChange}
-                    required
                     placeholder="Enter your first name"
                 />
             </div>
@@ -86,7 +110,6 @@ const EditProfile = () => {
                     name="last_name"
                     value={formData.last_name}
                     onChange={handleInputChange}
-                    required
                     placeholder="Enter your last name"
                 />
             </div>
@@ -100,7 +123,6 @@ const EditProfile = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    required
                     placeholder="Enter your email address"
                 />
             </div>
@@ -114,7 +136,6 @@ const EditProfile = () => {
                     name="username"
                     value={formData.username}
                     onChange={handleInputChange}
-                    required
                     placeholder="Choose a username"
                 />
             </div>
@@ -129,7 +150,6 @@ const EditProfile = () => {
                     value={formData.password}
                     onChange={handleInputChange}
                     placeholder="Enter your password"
-                    required
                 />
             </div>
 
