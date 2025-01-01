@@ -59,7 +59,6 @@ Make sure you have the following installed on your machine:
     ```bash
     python manage.py createsuperuser
     ```
-    - Fill correct phone end email id (phone number is verified by Twilio)
 
 5. Run the Django development server:
     ```bash
