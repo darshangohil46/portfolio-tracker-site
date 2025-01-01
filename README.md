@@ -37,7 +37,7 @@ Make sure you have the following installed on your machine:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/darshangohil46/food_ordering_website.git
+    git clone [https://github.com/darshangohil46/food_ordering_website.git](https://github.com/darshangohil46/portfolio-tracker-site)
     cd portfolio-tracker-site
     ```
 
