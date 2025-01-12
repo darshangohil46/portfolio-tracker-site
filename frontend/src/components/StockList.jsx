@@ -103,7 +103,8 @@ const StockList = () => {
                             <th>Name</th>
                             <th>Ticker</th>
                             <th>Quantity</th>
-                            <th>Buy Price</th>
+                            <th>Buy Price ($)</th>
+                            <th>Total</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -115,8 +116,11 @@ const StockList = () => {
                                     <td>{stock.ticker}</td>
                                     <td>{stock.quantity}</td>
                                     <td>
+                                        {stock.buy_price}
+                                    </td>
+                                    <td>
                                         <span className="badge bg-success fs-6">
-                                            $ {stock.buy_price}
+                                            $ {stock.buy_price * stock.quantity}
                                         </span>
                                     </td>
                                     <td>

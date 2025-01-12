@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import API_BASE_URL from '../Config';
+import MarketData from '../components/MarketData';
 axios.defaults.withCredentials = true;
 
 const Home = () => {
@@ -34,6 +35,8 @@ const Home = () => {
             <Link to="/portfolio" className="btn btn-primary btn-lg m-2">
                 Get Started
             </Link>
+
+            <MarketData />
         </div>
     );
 };

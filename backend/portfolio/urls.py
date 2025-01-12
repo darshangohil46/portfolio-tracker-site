@@ -11,4 +11,6 @@ urlpatterns = [
     path("get-data/", get_user_data, name="portfolio-metrics"),
     path("stocks/<int:pk>/", stock_detail, name="stock-detail"),
     path("update-profile/", update_user_profile, name="update-profile"),
+    path("fetch-data/", get_random_stock_data, name="update-profile"),
+    path("send-ticker/", send_ticker, name="send-ticker"),
 ]

@@ -23,7 +23,7 @@ const Portfolio = () => {
     return (
         <div className="container mt-4">
             <Dashboard />
-            <StockForm />
+            {/* <StockForm /> */}
             <StockList />
         </div>
     );

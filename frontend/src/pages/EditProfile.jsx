@@ -49,17 +49,18 @@ const EditProfile = () => {
 
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,12}$/;
 
-        if ((passwordRegex.test(formData.password)) || (formData.first_name) || (formData.last_name) || (formData.email) || (formData.username)) {
+        if ((formData.password) || (formData.first_name) || (formData.last_name) || (formData.email) || (formData.username)) {
             if (formData.first_name !== data.first_name) updatedData.first_name = formData.first_name;
             if (formData.last_name !== data.last_name) updatedData.last_name = formData.last_name;
             if (formData.email !== data.email) updatedData.email = formData.email;
             if (formData.username !== data.username) updatedData.username = formData.username;
             if (formData.password && (passwordRegex.test(formData.password))) {
                 updatedData.password = formData.password;
-            } else {
-                alert("Password must contain at least 1 uppercase letter,\n1 lowercase letter,\n1 special character,\nLength be between 8 and 12 characters long.");
-                return;
             }
+            // else if (!passwordRegex.test(formData.password)) {
+            //     alert("Password must contain\nat least 1 uppercase letter,\n1 lowercase letter,\n1 special character,\nLength be between 8 and 12 characters long.");
+            //     return;
+            // }
 
             try {
                 const response = await axios.post(
@@ -71,9 +72,17 @@ const EditProfile = () => {
                 if (formData.password) {
                     alert("Password change successfully. Please! Login Again...")
                 }
+                else if (Object.keys(updatedData).length === 0) {
+                    alert("First chanage data")
+                }
                 else {
+                    console.log('====================================');
+                    console.log(formData);
+                    console.log(updatedData);
+                    console.log('====================================');
                     alert("Change Successfully.");
                 }
+                console.log(updatedData);
                 window.location.reload();
             } catch (error) {
                 alert("This Username already Exists. Please select another username");

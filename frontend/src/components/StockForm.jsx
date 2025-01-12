@@ -56,7 +56,7 @@ const StockForm = () => {
             );
             console.log("Response Data:", response.data);
             setData(response.data);
-            window.location.reload()
+            // window.location.reload()
         } catch (error) {
             setError("Error Submitting Stock Data...")
             console.error("Error Submitting Stock Data:", error.response?.data || error);

@@ -203,16 +203,14 @@ def update_user_profile(request):
     if request.user.is_authenticated and request.method == "POST":
         data = json.loads(request.body)
         print(data)
-        user = request.user  # Using request.user directly since we already have the authenticated user
+        user = request.user
 
-        # Get the data from the request (this is optional as we only need data for changes)
         first_name = data.get("first_name")
         last_name = data.get("last_name")
         email = data.get("email")
         new_username = data.get("username")
         password = data.get("password")
 
-        # Update only the changed fields
         if first_name:
             user.first_name = first_name
         if last_name:
@@ -229,12 +227,9 @@ def update_user_profile(request):
             except User.DoesNotExist:
                 user.username = new_username
         if password:
-            user.set_password(password)  # Hash the new password
-
-        # Save the updated user object
+            user.set_password(password)
         user.save()
 
-        # Return the updated user profile
         return JsonResponse(
             {
                 "first_name": user.first_name,
@@ -247,4 +242,81 @@ def update_user_profile(request):
     else:
         return JsonResponse(
             {"error": "Authentication required."}, status=status.HTTP_401_UNAUTHORIZED
+        )
+
+
+import requests
+import random
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+
+# Real time data
+# ALPHA_VANTAGE_API_KEY_1 = "KHU68J4WNWBT4KSM"
+# ALPHA_VANTAGE_API_KEY_2 = "B69484MIRQ7NGGIY"
+# ALPHA_VANTAGE_API_KEY_3 = "RC6F1VKUFJRV05H2"
+# ALPHA_VANTAGE_API_KEY_4 = "V9CVMTKZ6QASJJW0"
+# ALPHA_VANTAGE_API_KEY_5 = "7LUG4UWOCCBC47IL"
+# ALPHA_VANTAGE_API_KEY_6 = "1D8H1989C2MYRYKF"
+# ALPHA_VANTAGE_API_KEY_7 = "175290E6LNTYRKZR"
+
+ALPHA_VANTAGE_API_KEY_1 = "demo"
+ALPHA_VANTAGE_API_KEY_2 = "demo"
+ALPHA_VANTAGE_API_KEY_3 = "demo"
+ALPHA_VANTAGE_API_KEY_4 = "demo"
+ALPHA_VANTAGE_API_KEY_5 = "demo"
+ALPHA_VANTAGE_API_KEY_6 = "175290E6LNTYRKZR"
+ticker = ""
+
+
+def fetch_stock_price(url):
+    r = requests.get(url)
+    data = r.json()
+    pretty_json = json.dumps(data, indent=4)
+    print(pretty_json)
+    return pretty_json
+
+
+@csrf_exempt
+def send_ticker(request):
+    if request.method == "GET":
+        global ticker
+        ticker = request.GET.get("ticker")
+        print(ticker)
+        return JsonResponse({"success": ticker}, status=200)
+
+
+@csrf_exempt
+def get_random_stock_data(request):
+    if request.method == "GET":
+        # selected_symbols = random.sample(STOCK_SYMBOLS, 5)
+        # print(selected_symbols)
+        # stock_data = None
+
+        # for symbol in selected_symbols:
+        type = request.GET.get("type")
+        if type == "today":
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=1min&apikey={ALPHA_VANTAGE_API_KEY_1}"
+            print(url)
+        elif type == "daily":
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY_2}"
+        elif type == "weekly":
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY_3}"
+        elif type == "monthly":
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY_4}"
+        elif type == "current":
+            url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY_5}"
+        elif type == "get_name":
+            url = f"https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={ticker},&apikey={ALPHA_VANTAGE_API_KEY_6}"
+        stock_info = fetch_stock_price(url)
+
+        if stock_info:
+            data = json.loads(stock_info)
+            return JsonResponse(data, safe=False, status=200)
+        else:
+            return JsonResponse({"error": "Time Series not found"}, status=404)
+
+    else:
+        return JsonResponse(
+            {"error": "Invalid Method."}, status=status.HTTP_400_BAD_REQUEST
         )
