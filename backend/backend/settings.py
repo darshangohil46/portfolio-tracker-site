@@ -149,17 +149,23 @@ CORS_ORIGIN_WHITELIST = [
 
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+# Real time data
+ALPHA_VANTAGE_API_KEY_1 = "KHU68J4WNWBT4KSM"
+ALPHA_VANTAGE_API_KEY_2 = "B69484MIRQ7NGGIY"
+ALPHA_VANTAGE_API_KEY_3 = "RC6F1VKUFJRV05H2"
+ALPHA_VANTAGE_API_KEY_4 = "V9CVMTKZ6QASJJW0"
+ALPHA_VANTAGE_API_KEY_5 = "7LUG4UWOCCBC47IL"
+ALPHA_VANTAGE_API_KEY_6 = "1D8H1989C2MYRYKF"
+ALPHA_VANTAGE_API_KEY_7 = "175290E6LNTYRKZR"
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_AUTHENTICATION_CLASSES": [
-#         "rest_framework.authentication.SessionAuthentication",  # For browser-based authentication
-#         "rest_framework.authentication.TokenAuthentication",  # If using token authentication
-#     ],
-#     "DEFAULT_PERMISSION_CLASSES": [
-#         "rest_framework.permissions.IsAuthenticated",  # Default permission class
-#     ],
-# }
+# ALPHA_VANTAGE_API_KEY_1 = "demo"
+# ALPHA_VANTAGE_API_KEY_2 = "demo"
+# ALPHA_VANTAGE_API_KEY_3 = "demo"
+# ALPHA_VANTAGE_API_KEY_4 = "demo"
+# ALPHA_VANTAGE_API_KEY_5 = "demo"
+# ALPHA_VANTAGE_API_KEY_6 = "demo"
+# ALPHA_VANTAGE_API_KEY_6 = "175290E6LNTYRKZR"

@@ -53,26 +53,7 @@ const Dashboard = () => {
 
     return (
         <div className="container my-4">
-            <div className="row align-items-start">
-                <div className="col-12 m-2">
-                    <div className="display-4">Portfolio</div>
-                </div>
-                <div className="col-12 m-2">
-                    <div className="text-info">
-                        <span className="h5">Welcome, </span>
-                        <span className="h5 me-2">{data.first_name}</span>
-                        <span className="h5 me-2">{data.last_name}</span>
-                        <button
-                            className="btn btn-sm btn-outline-primary"
-                            onClick={() => handleEditProfile()}
-                        >
-                            <i className="bi bi-pencil-square"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <h2 className="text-center mb-4">Portfolio Metrics</h2>
+            <h3 className="text-center mb-4 text-primary">Portfolio Metrics</h3>
             <div className="row">
                 {/* Total Value */}
                 <div className="col-md-6 mb-4">

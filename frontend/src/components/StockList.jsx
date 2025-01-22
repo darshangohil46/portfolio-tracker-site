@@ -95,7 +95,7 @@ const StockList = () => {
 
     return (
         <div className="container my-4">
-            <h2 className="text-center mb-4">Stock Holdings</h2>
+            <h3 className="text-center mb-4 text-info">Stock Holdings</h3>
             <div className="table-responsive">
                 <table className="table table-hover table-striped border shadow rounded">
                     <thead className="bg-dark text-white">
@@ -141,7 +141,7 @@ const StockList = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5" className="text-center text-muted py-4">
+                                <td colSpan="6" className="text-center text-muted py-4">
                                     <h5>No stocks available</h5>
                                     <p>Add some to start tracking your portfolio!</p>
                                 </td>
@@ -171,7 +171,6 @@ const StockList = () => {
                                         className="form-control"
                                         name="name"
                                         value={editedStock.name}
-                                        onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
@@ -181,7 +180,6 @@ const StockList = () => {
                                         className="form-control"
                                         name="ticker"
                                         value={editedStock.ticker}
-                                        onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">

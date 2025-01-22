@@ -13,4 +13,5 @@ urlpatterns = [
     path("update-profile/", update_user_profile, name="update-profile"),
     path("fetch-data/", get_random_stock_data, name="update-profile"),
     path("send-ticker/", send_ticker, name="send-ticker"),
+    path("health-check/", health_check, name="health_check"),
 ]

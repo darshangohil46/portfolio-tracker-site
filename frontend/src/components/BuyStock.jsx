@@ -29,6 +29,7 @@ export default function BuyStock() {
 
     const fetchStockDataNow = async () => {
         let response;
+        let response2;
         try {
             response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
                 params: { type: "current" },
@@ -36,11 +37,12 @@ export default function BuyStock() {
             });
             console.log(response.data);
             const apiData = response.data["Global Quote"];
+            console.log(apiData);
             setTicker(response.data["Global Quote"]["01. symbol"])
             // setStockName(response.data["Global Quote"]["01. symbol"])
             setStockData(apiData);
             try {
-                const response2 = await axios.get(`${API_BASE_URL}/fetch-data/`, {
+                response2 = await axios.get(`${API_BASE_URL}/fetch-data/`, {
                     params: { type: "get_name" },
                     withCredentials: true
                 });
@@ -111,7 +113,7 @@ export default function BuyStock() {
                         <div className="col-md-8">
                             <div className="card shadow-lg border-primary">
                                 <div className="card-header bg-primary text-white">
-                                    <h4 className="card-title">{stockData["01. symbol"]} Stock Data</h4>
+                                    <h4 className="card-title">{stockData["01. symbol"]} Stock Detail</h4>
                                 </div>
                                 <div className="card-body">
                                     <table className="table table-striped table-bordered">

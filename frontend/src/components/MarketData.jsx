@@ -37,7 +37,7 @@ function MarketData() {
     setLoading(true)
     const selectedValue = event.target.value;
     setSelectedTicker(selectedValue);
-    fetchStockData(selectedValue); // Pass the selected ticker directly
+    fetchStockData(selectedValue);
   };
 
   const fetchStockData = async (ticker) => {
@@ -47,8 +47,9 @@ function MarketData() {
     }
 
     setError("");
+    let response;
     try {
-      const response = await axios.get(`${API_BASE_URL}/send-ticker/`, {
+      response = await axios.get(`${API_BASE_URL}/send-ticker/`, {
         params: { ticker },
         withCredentials: true,
       });
@@ -60,15 +61,16 @@ function MarketData() {
       fetchStockDataWeek();
       fetchStockDataMonth();
     } catch (err) {
-      setError("Error fetching data. Please try again.");
+      setError("Error fetching data. Please try again." + "\n" + response.data["Information"]);
       setLoading(false)
       console.error(err);
     }
   };
 
   const fetchStockDataToday = async () => {
+    let response;
     try {
-      const response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
+      response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
         params: { type: "today" },
         withCredentials: true
       });
@@ -83,15 +85,16 @@ function MarketData() {
       }));
       setTodayData(formattedData);
     } catch (err) {
-      setError("Error fetching data. Please try again.");
+      setError("Error fetching data. Please try again. " + "\n" + response.data["Information"]);
       setLoading(false)
       console.error(err);
     }
   };
 
   const fetchStockDataDaily = async () => {
+    let response;
     try {
-      const response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
+      response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
         params: { type: "daily" },
         withCredentials: true
       });
@@ -106,15 +109,16 @@ function MarketData() {
       }));
       setDailyData(formattedData);
     } catch (err) {
-      setError("Error fetching data. Please try again.");
+      setError("Error fetching data. Please try again. " + "\n" + response.data["Information"]);
       setLoading(false)
       console.error(err);
     }
   };
 
   const fetchStockDataWeek = async () => {
+    let response;
     try {
-      const response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
+      response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
         params: { type: "weekly" },
         withCredentials: true
       });
@@ -129,15 +133,16 @@ function MarketData() {
       }));
       setWeekData(formattedData);
     } catch (err) {
-      setError("Error fetching data. Please try again.");
+      setError("Error fetching data. Please try again. " + "\n" + response.data["Information"]);
       setLoading(false)
       console.error(err);
     }
   };
 
   const fetchStockDataMonth = async () => {
+    let response;
     try {
-      const response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
+      response = await axios.get(`${API_BASE_URL}/fetch-data/`, {
         params: { type: "monthly" },
         withCredentials: true
       });
@@ -152,7 +157,7 @@ function MarketData() {
       }));
       setMonthData(formattedData);
     } catch (err) {
-      setError("Error fetching data. Please try again.");
+      setError("Error fetching data. Please try again. " + "\n" + response.data["Information"]);
       setLoading(false)
       console.error(err);
     }
@@ -162,7 +167,7 @@ function MarketData() {
     <div className="container mt-5">
       {/* radio btn */}
       <div className="container">
-        <h2 className="mb-4 text-center">Select a Stock</h2>
+        <h3 className="mb-4 text-center text-info">Select a Stock for show Performance</h3>
         <div className="form-group d-flex flex-wrap justify-content-center gap-4 m-3 p-3 border rounded">
           {STOCK_SYMBOLS.map((symbol) => (
             <div key={symbol} className="form-check d-flex align-items-center">

@@ -21,8 +21,8 @@ const Signup = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();  // Prevent the default form submission behavior at the very beginning
-        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,12}$/;
+        e.preventDefault();
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,12}$/;
 
         if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match!");
@@ -36,7 +36,7 @@ const Signup = () => {
             console.log("Signup Data:", formData);
             try {
                 const response = await axios.post(
-                    `${API_BASE_URL}/signup/`,  // Replace with your actual API endpoint
+                    `${API_BASE_URL}/signup/`, 
                     formData,
                     { withCredentials: true }
                 );
@@ -48,7 +48,7 @@ const Signup = () => {
                 alert("Username already exists.");
             }
         } else {
-            alert("Password must contain at least 1 uppercase letter,\n1 lowercase letter,\n1 special character,\nLength be between 8 and 12 characters long.");
+            alert("Password must contain at least 1 uppercase letter,\n1 lowercase letter,\n1 special character,\n1 Digit,\nLength be between 8 and 12 characters long.");
         }
     };
 
@@ -146,7 +146,7 @@ const Signup = () => {
                     />
                 </div>
 
-                <button type="submit" className="btn btn-primary w-100">
+                <button type="submit" className="btn btn-primary w-100 mb-4">
                     Sign Up
                 </button>
             </form>

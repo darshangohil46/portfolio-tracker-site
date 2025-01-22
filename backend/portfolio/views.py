@@ -10,6 +10,12 @@ from .serializers import *
 from django.contrib.auth import logout, login, authenticate
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.conf import settings
+import requests
+
+
+def health_check(request):
+    return JsonResponse({"status": "OK"}, status=200)
 
 
 @csrf_exempt
@@ -245,27 +251,6 @@ def update_user_profile(request):
         )
 
 
-import requests
-import random
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-
-# Real time data
-# ALPHA_VANTAGE_API_KEY_1 = "KHU68J4WNWBT4KSM"
-# ALPHA_VANTAGE_API_KEY_2 = "B69484MIRQ7NGGIY"
-# ALPHA_VANTAGE_API_KEY_3 = "RC6F1VKUFJRV05H2"
-# ALPHA_VANTAGE_API_KEY_4 = "V9CVMTKZ6QASJJW0"
-# ALPHA_VANTAGE_API_KEY_5 = "7LUG4UWOCCBC47IL"
-# ALPHA_VANTAGE_API_KEY_6 = "1D8H1989C2MYRYKF"
-# ALPHA_VANTAGE_API_KEY_7 = "175290E6LNTYRKZR"
-
-ALPHA_VANTAGE_API_KEY_1 = "demo"
-ALPHA_VANTAGE_API_KEY_2 = "demo"
-ALPHA_VANTAGE_API_KEY_3 = "demo"
-ALPHA_VANTAGE_API_KEY_4 = "demo"
-ALPHA_VANTAGE_API_KEY_5 = "demo"
-ALPHA_VANTAGE_API_KEY_6 = "175290E6LNTYRKZR"
 ticker = ""
 
 
@@ -289,25 +274,24 @@ def send_ticker(request):
 @csrf_exempt
 def get_random_stock_data(request):
     if request.method == "GET":
-        # selected_symbols = random.sample(STOCK_SYMBOLS, 5)
-        # print(selected_symbols)
-        # stock_data = None
-
-        # for symbol in selected_symbols:
         type = request.GET.get("type")
         if type == "today":
-            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=1min&apikey={ALPHA_VANTAGE_API_KEY_1}"
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={ticker}&interval=1min&apikey={settings.ALPHA_VANTAGE_API_KEY_1}"
             print(url)
         elif type == "daily":
-            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY_2}"
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={settings.ALPHA_VANTAGE_API_KEY_2}"
         elif type == "weekly":
-            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY_3}"
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={ticker}&apikey={settings.ALPHA_VANTAGE_API_KEY_3}"
         elif type == "monthly":
-            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY_4}"
+            url = f"https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol={ticker}&apikey={settings.ALPHA_VANTAGE_API_KEY_4}"
         elif type == "current":
-            url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={ALPHA_VANTAGE_API_KEY_5}"
+            symbol = request.GET.get("symbol")
+            url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={ticker}&apikey={settings.ALPHA_VANTAGE_API_KEY_5}"
+            if symbol:
+                url = f"https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol={symbol}&apikey={settings.ALPHA_VANTAGE_API_KEY_6}"
         elif type == "get_name":
-            url = f"https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={ticker},&apikey={ALPHA_VANTAGE_API_KEY_6}"
+            url = f"https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords={ticker}&apikey={settings.ALPHA_VANTAGE_API_KEY_7}"
+            print(url)
         stock_info = fetch_stock_price(url)
 
         if stock_info:
