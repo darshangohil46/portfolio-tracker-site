@@ -19,7 +19,7 @@ The Portfolio Tracker Site is a web application that allows users to track their
 - **Frontend:** React, HTML, CSS, JavaScript, Bootstrap
 - **Backend:** Python
 - **Database:** sqlite3
-- **APIs:** Various APIs (Alpha Vantage)
+- **APIs:** Various APIs (Alpha Vantage) https://www.alphavantage.co/documentation/
 
 ## Getting Started
 
