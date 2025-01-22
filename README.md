@@ -19,7 +19,7 @@ The Portfolio Tracker Site is a web application that allows users to track their
 - **Frontend:** React, HTML, CSS, JavaScript, Bootstrap
 - **Backend:** Python
 - **Database:** sqlite3
-- **APIs:** Various APIs
+- **APIs:** Various APIs (Alpha Vantage)
 
 ## Getting Started
 
@@ -31,7 +31,7 @@ Make sure you have the following installed on your machine:
 
 - Node.js
 - npm (Node Package Manager)
-- MongoDB
+- Python
 
 ### Installation
 
